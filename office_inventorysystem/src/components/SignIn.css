@@ -74,3 +74,14 @@ input:focus {
     bottom: 10px;
     right: 10px;
 }
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.error-hidden {
+  display: none; 
+}
