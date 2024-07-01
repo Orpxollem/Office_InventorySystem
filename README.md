@@ -11,15 +11,7 @@ cd office_inventorysystem
 ```
 
 ``` cmd
-pip install Flask
-```
-
-``` cmd
-pip install PyMongo
-```
-
-``` cmd
-pip install flask_cors
+pip install -r requirements.txt
 ```
 
 ```cmd
