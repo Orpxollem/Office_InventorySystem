@@ -32,6 +32,7 @@ const SignIn = () => {
         })
         .then(data => {
             if (data.success) {
+                localStorage.setItem('userId', data.userId);
                 navigate('/dashboard', { replace: true });
             } else {
                 alert(`Login failed: ${data.message}`);

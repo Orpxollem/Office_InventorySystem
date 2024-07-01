@@ -10,6 +10,18 @@
 cd office_inventorysystem
 ```
 
+``` cmd
+pip install Flask
+```
+
+``` cmd
+pip install PyMongo
+```
+
+``` cmd
+pip install flask_cors
+```
+
 ```cmd
 python app.py
 ```

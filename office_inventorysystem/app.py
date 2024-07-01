@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
 from flask_cors import CORS
+from bson import ObjectId
 
 app = Flask(__name__)
 
@@ -12,7 +13,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return 'Office Inventory System'
+    return 'Office Inventory System Runnig...'
 
 @app.route('/signin', methods=['POST'])
 def signin():
@@ -24,9 +25,21 @@ def signin():
         user = db['Users'].find_one({'staffId': staffId, 'password': password})
         
         if user:
-            return jsonify({'success': True, 'message': 'Login successful'})
+            return jsonify({'success': True, 'message': 'Login successful', 'userId': str(user['_id'])})
         else:
             return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
+        
+@app.route('/user/<id>', methods=['GET'])
+def get_user(id):
+    user = db['Users'].find_one({'_id': ObjectId(id)})
+    if user:
+        return jsonify({'name': user['name'], 'staffId': user['staffId']})
+    else:
+        return jsonify({'error': 'User not found'}), 404
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run()
 
 if __name__ == "__main__":
     app.debug = True
