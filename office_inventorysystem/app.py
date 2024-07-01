@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-client = MongoClient('mongodb://localhost:27017')
+client = MongoClient('mongodb+srv://CyberXTeam:CybeerXPass@officeinventorysystem.mj2id19.mongodb.net/')
 
 db = client['office_inventory_system']
 
@@ -21,7 +21,7 @@ def signin():
         staffId = data.get('staffId')
         password = data.get('password')
         
-        user = db['users'].find_one({'staffId': staffId, 'password': password})
+        user = db['Users'].find_one({'staffId': staffId, 'password': password})
         
         if user:
             return jsonify({'success': True, 'message': 'Login successful'})
