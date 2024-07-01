@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
-from bson.objectid import ObjectId
 from flask_cors import CORS
 
 app = Flask(__name__)
