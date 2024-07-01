@@ -9,7 +9,9 @@ const SignIn = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        
+
+        const form = event.target;
+
         const formData = {
             staffId: event.target.staffId.value,
             password: event.target.password.value,
@@ -24,7 +26,7 @@ const SignIn = () => {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('User Sign In Failed!');
             }
             return response.json();
         })
@@ -32,14 +34,15 @@ const SignIn = () => {
             if (data.success) {
                 navigate('/dashboard', { replace: true });
             } else {
-                console.error('Login failed:', data.message);
-                alert('Login failed: ' + data.message);
+                alert(`Login failed: ${data.message}`);
+                form.reset();
             }
         })
         .catch((error) => {
-            console.error('Error:', error);
+            alert(`Login failed: ${error.message}`);
+            form.reset();
         });
-    }
+    };
 
     return (
         <div className='container'>
@@ -61,12 +64,8 @@ const SignIn = () => {
                 </div>
                 <button type='submit'>Sign In</button>
             </form>
-
-            <div className='tag'>
-                © Powered by the CyberX Team
-            </div>
         </div>
     );
-}
+};
 
 export default SignIn;

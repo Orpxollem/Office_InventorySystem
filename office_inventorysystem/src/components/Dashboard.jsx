@@ -5,7 +5,6 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const handleSignOut = () => {
-        // Perform any sign-out logic here (e.g., clearing auth tokens, etc.)
         navigate('/', { replace: true });
     };
 
