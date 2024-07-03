@@ -5,6 +5,7 @@ from bson import ObjectId
 
 app = Flask(__name__)
 
+# Link to Database
 client = MongoClient('mongodb+srv://CyberXTeam:CybeerXPass@officeinventorysystem.mj2id19.mongodb.net/')
 
 db = client['office_inventory_system']
