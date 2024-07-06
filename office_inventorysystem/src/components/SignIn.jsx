@@ -63,8 +63,11 @@ const SignIn = () => {
                     <label>PASSWORD:</label>
                     <input type="password" name="password" required />
                 </div>
-                <button type='submit'>Sign In</button>
+                <button type='submit' className='SignInbutton'>Sign In</button>
             </form>
+            <div className='tag'>
+                © Powered by the CyberX Team
+            </div>
         </div>
     );
 };
