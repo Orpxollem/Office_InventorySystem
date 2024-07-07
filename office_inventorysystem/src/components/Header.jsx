@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Image, Space } from 'antd';
+import { Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
-import SideMenu from './SideMenu';
 import { FaUserTie, FaMailBulk } from "react-icons/fa";
 
 const Header = () => {
@@ -50,7 +49,7 @@ const Header = () => {
         <div>
 
             <div className='DashHeader'>
-                <Image src={require('../assets/dashboard-header.png')}style={{height: 40}} />
+            <img src={require('../assets/dashboard-header.png')} style={{ height: 40 }} alt="Dashboard Header" />
                 <Space>
                     <FaMailBulk style={{fontSize: 22, marginTop: 2}} className='messageIcon' onClick={toggleDropdownNotify}/>
                     {dropdownNotify &&(

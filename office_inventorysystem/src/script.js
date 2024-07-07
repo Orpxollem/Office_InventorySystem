@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('form[name=signin_form]').submit(function(e) {
         e.preventDefault();
 
-        var formData = {
+        var staffformData = {
             staffId: $("input[name='staffId']").val(),
             password: $("input[name='password']").val()
         };
@@ -11,7 +11,7 @@ $(document).ready(function() {
             url: "http://localhost:5000/signin",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(formData),
+            data: JSON.stringify(staffformData),
             success: function(resp) {
                 console.log(resp);
             },

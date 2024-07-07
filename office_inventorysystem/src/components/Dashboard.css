@@ -3,12 +3,17 @@ body {
     font-family: Arial, sans-serif;
   }
   
-.DashHeader {
-  display: flex;
-  justify-content: space-between;
-  padding: 0px 20px;
-  background-color: #c1c5cc;
-}
+  .DashHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 98%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+    background-color: #c1c5cc;
+    z-index: 1000;
+  }
 
 .DashLogout {
   background-color: #1264d2;
@@ -97,4 +102,5 @@ body {
   height: 100vh;
   justify-content: flex-start;
   align-items: flex-start;
+  padding-top: 60px;
 }
