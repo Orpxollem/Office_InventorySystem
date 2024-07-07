@@ -222,7 +222,7 @@ const EmployeesTable = ({ employees }) => (
                     <td>{index + 1}</td>
                     <td>{employee.emplID}</td>
                     <td>{employee.emplName}</td>
-                    <td>{employee.email}</td>
+                    <td><a href={`mailto:${employee.email}`}>{employee.email}</a></td>
                     <td>{employee.contact}</td>
                 </tr>
             ))}
