@@ -7,6 +7,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 0px 20px;
+  background-color: #c1c5cc;
 }
 
 .DashLogout {
@@ -62,10 +63,38 @@ body {
   background-color: #f0f0f0;
 }
 
-.SideMenuandDashContent{
+.side-menu-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 256px;
+  transition: width 0.2s;
+}
+
+.side-menu-container.collapsed {
+  width: 80px;
+}
+
+.ant-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #dfe2e7;
+  justify-content: space-between;
+}
+
+.ant-menu-item {
+  background-color: #dfe2e7;
+}
+
+.ant-menu-item:hover {
+  background-color: #ccd0d5;
+}
+
+.Content{
   display: flex;
   flex-direction: row;
-  height: calc(100vh - 100px);
+  height: 100vh;
   justify-content: flex-start;
   align-items: flex-start;
 }

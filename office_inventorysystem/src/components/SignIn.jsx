@@ -51,7 +51,7 @@ const SignIn = () => {
                 <img src={login_image} alt='MOC LOGO'/>
             </div>
 
-            <form name="signin_form" onSubmit={handleSubmit}>
+            <form name="signin_form" className='.signIn' onSubmit={handleSubmit}>
                 <div>
                     <img src={form_image} alt='FORM HEADER'/>
                 </div>
