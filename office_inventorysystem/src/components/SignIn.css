@@ -1,8 +1,6 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(to right, #1264d2, #ffff );
-overflow: hidden;
 }
 
 .container {
@@ -11,6 +9,8 @@ overflow: hidden;
   align-items: center;
   height: 100vh;
   color: #f5f5f5;
+  background: linear-gradient(to right, #1264d2, #ffff );
+  overflow: hidden;
 }
 
 .header {
@@ -19,7 +19,7 @@ overflow: hidden;
     background-color: #1264d2;
 }
 
-form {
+.signIn {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -39,7 +39,7 @@ label{
     color: #000000;
 }
 
-button {
+.SignInbutton {
   background-color: #1264d2;
   color: white;
   padding: 14px 20px;

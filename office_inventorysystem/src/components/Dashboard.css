@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .DashHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 98%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+    background-color: #c1c5cc;
+    z-index: 1000;
+  }
+
+.DashLogout {
+  background-color: #1264d2;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.profileIcon {
+  padding-left: 20px;
+  cursor: pointer;
+}
+
+.messageIcon{
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dropdown-notify {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 10px 40px;
+  cursor: pointer;
+}
+
+.notify-item {
+  padding: 10px 40px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.side-menu-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 256px;
+  transition: width 0.2s;
+}
+
+.side-menu-container.collapsed {
+  width: 80px;
+}
+
+.ant-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #dfe2e7;
+  justify-content: space-between;
+}
+
+.ant-menu-item {
+  background-color: #dfe2e7;
+}
+
+.ant-menu-item:hover {
+  background-color: #ccd0d5;
+}
+
+.Content{
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 60px;
+}
