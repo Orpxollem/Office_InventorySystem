@@ -7,7 +7,7 @@ export default function Reports() {
     return (
         <div>
             <Header />
-            <Space className='.Content'>
+            <Space className='Content'>
                 <SideMenu />
                 <Space>
                     <h1>Reports</h1>

@@ -7,7 +7,7 @@ export default function Dashboard() {
     return (
         <div>
             <Header />
-            <Space className='.Content'>
+            <Space className='Content'>
                 <SideMenu />
                 <Space>
                     <h1>Dashboard</h1>

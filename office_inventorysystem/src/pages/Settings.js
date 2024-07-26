@@ -7,11 +7,11 @@ export default function Settings() {
     return (
         <div>
             <Header />
-            <Space className='.Content'>
+            <Space className='Content'>
                 <SideMenu />
                 <Space>
                     <h1>Settings</h1>
-                    <p>Inventory content</p>
+                    <p>Settings content</p>
                 </Space>
             </Space>
         </div>

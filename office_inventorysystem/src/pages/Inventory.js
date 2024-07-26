@@ -7,7 +7,7 @@ export default function Inventory() {
     return (
         <div>
             <Header />
-            <Space className='.Content'>
+            <Space className='Content'>
                 <SideMenu />
                 <Space>
                     <h1>Inventory</h1>
