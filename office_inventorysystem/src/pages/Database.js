@@ -7,7 +7,7 @@ export default function Database() {
     return (
         <div>
             <Header />
-            <Space className='.Content'>
+            <Space className='Content'>
                 <SideMenu />
                 <Space>
                     <h1>Database</h1>
