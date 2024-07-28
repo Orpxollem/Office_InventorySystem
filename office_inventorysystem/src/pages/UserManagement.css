@@ -87,6 +87,7 @@ form input, form select {
 .employees-table td {
     padding: 12px 15px;
     border: 1px solid #000;
+    cursor: default;
 }
 
 .employees-table tbody tr {
