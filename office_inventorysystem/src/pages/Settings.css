@@ -11,7 +11,7 @@
   }
 
   .settings-button {
-    margin-left: 260px;
+    margin-left: 70%;
   }
 
   .changePass-button {
@@ -32,13 +32,6 @@ label{
 
 input {
     margin-bottom: 20px;
-}
-
-
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .account-container {

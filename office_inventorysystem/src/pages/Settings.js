@@ -10,14 +10,77 @@ import './Settings.css';
 
 
 const ChangePassword = () => {
+    
+    const [userID, setID] = useState(false)
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
+
+        if (userId) {
+            axios.get(`http://localhost:5000/user/${userId}`)
+            .then(response => {
+                if (response.data.staffId) {
+                    setID(response.data.staffId);
+                }
+                else {
+                    console.log('User not found');
+                }
+            })
+            .catch(error => {
+                console.error('There was an error fetching the user data!', error);
+            });
+        }
+    }, []);
+
+    const handleChangePass = (event) => {
+        event.preventDefault();
+
+        const form = event.target;
+        
+
+        const formData = {
+            oldPass: form.oldPass.value,
+            newPass: form.newPass.value,
+            confirmPass: form.confirmPass.value,
+            staffId: userID,
+        };
+
+        fetch('http://localhost:5000/update_password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Password Change Failed!');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert(`Password changed successfully!`);
+                form.reset();
+            } else {
+                alert(`Password change failed: ${data.message}`);
+                form.reset();
+            }
+        })
+        .catch((error) => {
+            alert(`Password change failed: ${error.meassage}`);
+            form.reset();
+        });
+    };
+
     return(
         <div className='ChangePasscontainer'>
-            <form name="change_pass">
+            <form name="change_pass" onSubmit={handleChangePass}>
                 <div>
                     <label>Change Password</label>
-                    <input type="text" name="oldPass" placeholder='Old Password' required/>
-                    <input type="text" name="newPass" placeholder='New Password' required/>
-                    <input type="text" name="confirmPass" placeholder='Repeat New Password' required/>
+                    <input type="password" name="oldPass" placeholder='Old Password' required/>
+                    <input type="password" name="newPass" placeholder='New Password' required/>
+                    <input type="password" name="confirmPass" placeholder='Repeat New Password' required/>
                 </div>
                 <div className="settings-button">
                     <button type="submit" className="changePass-button">Save Changes</button>
