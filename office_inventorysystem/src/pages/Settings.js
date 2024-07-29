@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import Header from '../components/Header';
 import SideMenu from '../components/SideMenu';
 import { Space, Button, Divider} from 'antd';
@@ -27,6 +28,40 @@ const ChangePassword = () => {
 };
 
 const Account = () => {
+    const [userName, setUserName] = useState(false)
+    const [userID, setID] = useState(false)
+    const [userPosition, setPoistion] = useState(false)
+    const [userEmail, setEmail] = useState(false)
+
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
+
+        if (userId) {
+            axios.get(`http://localhost:5000/user/${userId}`)
+            .then(response => {
+                if (response.data.name) {
+                    setUserName(response.data.name);
+                }
+                if (response.data.staffId) {
+                    setID(response.data.staffId);
+                }
+                if (response.data.position) {
+                    setPoistion(response.data.position);
+                }
+                if (response.data.email) {
+                    setEmail(response.data.email);
+                } 
+                else {
+                    console.log('User not found');
+                }
+            })
+            .catch(error => {
+                console.error('There was an error fetching the user data!', error);
+            });
+        }
+    }, []);
+
     return(
         <div>
 
@@ -41,12 +76,12 @@ const Account = () => {
                             <div className="input-field">
                                 <label>Name</label>
                                 <input type="text" disabled/>
-                                <text className='input-placeholder'>Main Staff 1</text>
+                                <text className='input-placeholder'>{userName}</text>
                             </div>
                             <div className="input-field">
                                 <label>Staff ID</label>
                                 <input type="text" disabled/>
-                                <text className='input-placeholder'>MainStaff1</text>
+                                <text className='input-placeholder'>{userID}</text>
                             </div>
                         </div>
 
@@ -54,12 +89,12 @@ const Account = () => {
                             <div className="input-field">
                                 <label>Position</label>
                                 <input type="text" disabled/>
-                                <text className='input-placeholder'>Manager</text>
+                                <text className='input-placeholder'>{userPosition}</text>
                             </div>
                             <div className="input-field">
                                 <label>Email</label>
                                 <input type="text" disabled/>
-                                <text className='input-placeholder'>mainstaff1@mail.org</text>
+                                <text className='input-placeholder'>{userEmail}</text>
                             </div>
                         </div>
                     </form>
@@ -85,13 +120,13 @@ export default function Settings() {
                 <Space direction='vertical' style={{marginLeft: 30}}>
                     <h3>GENERAL</h3>
                         <Space style={{marginTop: -30}}>
-                            <Button icon={<MdOutlineAccountBalance style={{ fontSize: '18px'}} />} onClick={() => setContent('Account')}>
+                            <Button className='custom-btn' icon={<MdOutlineAccountBalance style={{ fontSize: '18px'}} />} onClick={() => setContent('Account')}>
                                 <h4>Account</h4> 
                             </Button>
                         </Space>
                     <h3>OTHER</h3>
                     <Space style={{marginTop: -30}}>
-                        <Button icon={<TbPasswordUser style={{ fontSize: '18px'}} />} onClick={() => setContent('ChangePassword')}>
+                        <Button className='custom-btn' icon={<TbPasswordUser style={{ fontSize: '18px'}} />} onClick={() => setContent('ChangePassword')}>
                             <h4>Change Password</h4>
                         </Button>
                     </Space>

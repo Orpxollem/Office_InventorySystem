@@ -78,4 +78,14 @@ form {
   margin-top: -45px;
   margin-left: 10px;
   font-size: 14px;
+  cursor: default;
+}
+
+.custom-btn:active {
+  background-color: #ccd0d5 !important;
+  transform: translateY(4px);
+}
+
+h1, h3 {
+  cursor: default;
 }

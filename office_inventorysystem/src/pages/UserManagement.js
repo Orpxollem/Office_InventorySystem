@@ -65,7 +65,7 @@ export default function UserManagement() {
             if (data.success) {
                 alert('User updated successfully!');
                 form.reset();
-                fetchEmployees(); // Refresh employee list
+                fetchEmployees();
             } else {
                 alert(`User update failed: ${data.message}`);
                 form.reset();

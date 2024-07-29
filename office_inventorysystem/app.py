@@ -35,7 +35,7 @@ def signin():
 def get_user(id):
     user = db['Users'].find_one({'_id': ObjectId(id)})
     if user:
-        return jsonify({'name': user['name'], 'staffId': user['staffId']})
+        return jsonify({'name': user['name'], 'staffId': user['staffId'], 'position': user['position'], 'email': user['email']})
     else:
         return jsonify({'error': 'User not found'}), 404
 
