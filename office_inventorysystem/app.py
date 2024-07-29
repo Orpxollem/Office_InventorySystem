@@ -35,9 +35,34 @@ def signin():
 def get_user(id):
     user = db['Users'].find_one({'_id': ObjectId(id)})
     if user:
-        return jsonify({'name': user['name'], 'staffId': user['staffId']})
+        return jsonify({'name': user['name'], 'staffId': user['staffId'], 'position': user['position'], 'email': user['email'], 'password': user['password']})
     else:
         return jsonify({'error': 'User not found'}), 404
+    
+@app.route('/update_password', methods=['POST'])
+def update_password():
+    if request.method == 'POST':
+        data = request.json
+        staffId = data.get('staffId')
+        oldPass = data.get('oldPass')
+        newPass = data.get('newPass')
+        confirmPass = data.get('confirmPass')
+
+        user = db['Users'].find_one({'staffId': staffId})
+
+        currentPass = user.get('password')
+
+        if user:
+            if currentPass == oldPass:
+                if confirmPass == newPass:
+                    db['Users'].update_one({'staffId': staffId}, {'$set': {'password': newPass}})
+                    return jsonify({'success': True, 'message': 'Password updated successfully'})
+                else:
+                    return jsonify({'success': False, 'message': 'New Passwords do not match!'})
+            else:
+                    return jsonify({'success': False, 'message': 'Current password is incorrect!'})
+        else:
+            return jsonify({'success': False, 'message': 'Password update unsuccessful'}), 404
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
@@ -96,6 +121,7 @@ def get_employees():
     for employee in employees:
         employee['_id'] = str(employee['_id'])
     return jsonify(employees)
+
 
 if __name__ == "__main__":
     app.debug = True

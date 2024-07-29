@@ -24,7 +24,6 @@ const Header = () => {
 
     useEffect(() => {
         const userId = localStorage.getItem('userId');
-        console.log('userId:', userId);
         if (userId) {
             axios.get(`http://localhost:5000/user/${userId}`)
                 .then(response => {
