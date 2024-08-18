@@ -131,6 +131,23 @@ def get_employees():
         employee['_id'] = str(employee['_id'])
     return jsonify(employees)
 
+@app.route('/inventory', methods=['GET'])
+@cross_origin()
+def get_inventory():
+    inventory = list(db['Inventory'].find())
+    for item in inventory:
+        item['_id'] = str(item['_id'])
+    return jsonify(inventory)
+
+
+@app.route('/reports', methods=['GET'])
+@cross_origin()
+def get_report():
+    reports = list(db['Reports'].find())
+    for report in reports:
+        report['_id'] = str(report['_id'])
+    return jsonify(reports)
+
 
 if __name__ == "__main__":
     app.debug = True
