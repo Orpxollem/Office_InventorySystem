@@ -7,7 +7,7 @@
 - Run the following commands in a **Command Prompt terminal** to start the server for the Website
 
 ``` cmd
-cd office_inventorysystem
+cd Office_InventorySystem
 ```
 
 ``` cmd
