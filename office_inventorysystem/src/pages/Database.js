@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React, { useState} from 'react';
 import Header from '../components/Header';
 import SideMenu from '../components/SideMenu';
 import './Database.css';
 import { Space, Button, Divider} from 'antd';
-import { BsFillCartCheckFill } from "react-icons/bs";
-import { MdOutlineAddchart } from "react-icons/md";
+import { MdOutlineInventory } from "react-icons/md";
+import { MdOutlinePostAdd } from "react-icons/md";
+import { BiCartAdd } from "react-icons/bi";
+import { GrDocumentUpdate } from "react-icons/gr";
+import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 
 
 const AddToInventory = () => {
@@ -330,22 +332,22 @@ export default function Database() {
                 <Space direction='vertical' style={{marginLeft: 30}}>
                     <h3>INVENTORY</h3>
                         <Space style={{marginTop: -30}} direction='vertical'>
-                            <Button className='custom-btn' icon={<BsFillCartCheckFill style={{ fontSize: '18px'}} />} onClick={() => setContent('AddItem')}>
+                            <Button className='custom-btn' icon={<BiCartAdd style={{ fontSize: '18px'}} />} onClick={() => setContent('AddItem')}>
                                 <h4>Add Item</h4> 
                             </Button>
-                            <Button className='custom-btn' icon={<BsFillCartCheckFill style={{ fontSize: '18px'}} />} onClick={() => setContent('RemoveItem')}>
+                            <Button className='custom-btn' icon={<MdOutlineRemoveShoppingCart style={{ fontSize: '18px'}} />} onClick={() => setContent('RemoveItem')}>
                                 <h4>Remove Item</h4> 
                             </Button>
-                            <Button className='custom-btn' icon={<BsFillCartCheckFill style={{ fontSize: '18px'}} />} onClick={() => setContent('UpdateItem')}>
+                            <Button className='custom-btn' icon={<MdOutlineInventory style={{ fontSize: '18px'}} />} onClick={() => setContent('UpdateItem')}>
                                 <h4>Update Item</h4> 
                             </Button>
                         </Space>
                     <h3>REPORTS</h3>
                     <Space style={{marginTop: -30}} direction='vertical'>
-                        <Button className='custom-btn' icon={<MdOutlineAddchart style={{ fontSize: '18px'}} />} onClick={() => setContent('AddRecord')}>
+                        <Button className='custom-btn' icon={<MdOutlinePostAdd style={{ fontSize: '18px'}} />} onClick={() => setContent('AddRecord')}>
                             <h4>Add Record</h4>
                         </Button>
-                        <Button className='custom-btn' icon={<MdOutlineAddchart style={{ fontSize: '18px'}} />} onClick={() => setContent('UpdateRecord')}>
+                        <Button className='custom-btn' icon={<GrDocumentUpdate style={{ fontSize: '18px'}} />} onClick={() => setContent('UpdateRecord')}>
                             <h4>Update Record</h4>
                         </Button>
                     </Space>

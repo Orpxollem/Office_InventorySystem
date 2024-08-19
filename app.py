@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from flask_cors import CORS, cross_origin
 from flask.helpers import send_from_directory
 from bson import ObjectId
+from datetime import datetime
 
 app = Flask(__name__, static_folder='office_inventorysystem/build', static_url_path='')
 
@@ -18,6 +19,7 @@ CORS(app)
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
 
+
 @app.route('/signin', methods=['POST'])
 @cross_origin()
 def signin():
@@ -29,10 +31,31 @@ def signin():
         user = db['Users'].find_one({'staffId': staffId, 'password': password})
         
         if user:
+            db['Users'].update_one(
+                {'_id': user['_id']},
+                {'$set': {'last_login': datetime.utcnow()}}
+            )
+
+            db['UserLoginTimes'].insert_one({
+                'userId': user['_id'],
+                'loginTime': datetime.utcnow()
+            })
             return jsonify({'success': True, 'message': 'Login successful', 'userId': str(user['_id'])})
         else:
-            return jsonify({'success': False, 'message': 'Invalid credentials'})
+            return jsonify({'success': False, 'message': 'Invalid credentials'})        
         
+@app.route('/api/user_activity', methods=['GET'])
+@cross_origin()
+def user_activity():
+    pipeline = [
+        {"$group": {"_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$loginTime"}}, "count": {"$sum": 1}}},
+        {"$sort": {"_id": 1}}
+    ]
+    activity = list(db['UserLoginTimes'].aggregate(pipeline))
+    dates = [item['_id'] for item in activity]
+    counts = [item['count'] for item in activity]
+    
+    return jsonify({"dates": dates, "activity": counts})
 
 @app.route('/user/<id>', methods=['GET'])
 @cross_origin()
@@ -242,6 +265,19 @@ def update_report():
         return jsonify({'success': True, 'message': 'Report updated successfully'})
     else:
         return jsonify({'success': False, 'message': 'Report does not exist'})
+    
+
+@app.route('/api/inventory_summary', methods=['GET'])
+@cross_origin()
+def inventory_summary():
+    pipeline = [
+        {"$group": {"_id": "$type", "count": {"$sum": 1}}}
+    ]
+    summary = list(db['Inventory'].aggregate(pipeline))
+    result = {item['_id']: item['count'] for item in summary}
+    return jsonify(result)
+
+
 
 
 if __name__ == "__main__":

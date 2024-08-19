@@ -128,7 +128,7 @@ const Account = () => {
     return(
         <div>
 
-            <h1>Account Overview</h1>
+            <h1 className='pageTitle'>Account Overview</h1>
 
             <div className="account-container">
                     <FaChalkboardUser style={{fontSize: 100}}/>
