@@ -2,23 +2,23 @@
 
 ## Setup
 
-- The Server must be alive (actively running in command prompt) for the website to get access to its API
+- The Server must be alive (actively running in terminal) for the website to get access to its API
 
-- Run the following commands in a **Command Prompt terminal** to start the server for the Website
+- Run the following commands in a **Terminal** to start the server for the Website
 
-``` cmd
+``` shell
 cd Office_InventorySystem
 ```
 
-``` cmd
+``` shell
 pip install -r requirements.txt
 ```
 
-```cmd
+```shell
 python app.py
 ```
 
-- Run the following commands in a **Powershell terminal** to run the Website
+- Run the following commands in a **Terminal** to run the Website
 
 ``` shell
 cd office_inventorysystem
