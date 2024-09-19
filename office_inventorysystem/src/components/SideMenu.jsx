@@ -55,11 +55,6 @@ export default function SideMenu() {
             key: '/admin/reports'
           },
           {
-            label: 'Database',
-            icon: <RiDatabase2Fill />,
-            key: '/admin/database'
-          },
-          {
             label: 'Settings',
             icon: <FiSettings />,
             key: '/admin/settings'

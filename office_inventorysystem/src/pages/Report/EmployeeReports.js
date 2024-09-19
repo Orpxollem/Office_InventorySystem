@@ -27,18 +27,18 @@ export default function EmployeeReports() {
             setFilterReports(response.data);
         })
         .catch(error => {
-            console.error('There was an error fetching the reports!')
+            console.error('There was an error fetching the reports!', error);
         });
     };
 
-    const handleSearch = (e) => {
-        const searchItem = e.target.value.toUpperCase();
-        const filtered = reports.filter(item =>
+    const handleSearchReport = (e) => {
+        const searchReportItem = e.target.value.toUpperCase();
+        const filter = reports.filter(item =>
             Object.values(item).some(val =>
-                String(val).toUpperCase().includes(searchItem)
+                String(val).toUpperCase().includes(searchReportItem)
             )
         );
-        setFilterReports(filtered);
+        setFilterReports(filter);
     };
 
     const exportToPDF = () => {
@@ -68,8 +68,8 @@ export default function EmployeeReports() {
                     <h1 className='pageTitle'>Office Inventory Reports</h1>
                     <Space style={{ marginBottom: 16, justifyContent: 'space-between', width: '100%' }}>
                         <Input
-                            placeholder="Search Inventory"
-                            onChange={handleSearch}
+                            placeholder="Search Report"
+                            onChange={handleSearchReport}
                             style={{ width: 200 }}
                             prefix={<SearchOutlined />}
                         />
@@ -82,7 +82,7 @@ export default function EmployeeReports() {
                             </Button>
                         </Space>
                     </Space>
-                    <DisplayReports report_items={reports}/>
+                    <DisplayReports report_items={filterReports}/>
                 </Space>
             </Space>
         </div>
