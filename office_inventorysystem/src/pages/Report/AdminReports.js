@@ -1,19 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import SideMenu from '../../components/SideMenu';
-import { Space, Table, Input, Button, Modal } from 'antd';
+import { Space, Table, Input, Button, Modal, Dropdown, Menu } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { FaFilePdf } from "react-icons/fa6";
-import { BsFiletypeXlsx } from "react-icons/bs";
+import { CiExport } from 'react-icons/ci';
+import { FaFilePdf } from 'react-icons/fa6';
+import { BsFiletypeXlsx } from 'react-icons/bs';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
-import { GrDocumentUpdate } from "react-icons/gr";
-import { MdOutlinePostAdd } from "react-icons/md";
+import { GrDocumentUpdate } from 'react-icons/gr';
+import { LuClipboardEdit } from "react-icons/lu";
+import { MdOutlinePostAdd } from 'react-icons/md';
 
-import './Reports.css'
-
+import './Reports.css';
 
 export default function Reports() {
     const [reports, setReports] = useState([]);
@@ -32,7 +33,7 @@ export default function Reports() {
             setFilterReports(response.data);
         })
         .catch(error => {
-            console.error('There was an error fetching the reports!', error)
+            console.error('There was an error fetching the reports!', error);
         });
     };
 
@@ -73,100 +74,42 @@ export default function Reports() {
 
     const handleAdd = (event) => {
         event.preventDefault();
-
-        const form = event.target;
-
-        const formData = {
-            assignmentID: form.assignmentID.value,
-            employeeID: form.employeeID.value,
-            equipmentID: form.equipmentID.value,
-            assignmentDate: form.assignmentDate.value,
-            date: form.date.value
-        };
-
-        fetch('http://localhost:5000/add_report', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Report Item Add Failed!');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                alert('Report Item added successfully!');
-                form.reset();
-                fetchReport();
-            } else {
-                alert(`Report Item add failed: ${data.message}`);
-                form.reset();
-            }
-        })
-        .catch((error) => {
-            alert(`Report Item add failed: ${error.message}`);
-            form.reset();
-        });
-
         handleCancel();
     };
 
     const handleUpdate = (event) => {
         event.preventDefault();
-
-        const form = event.target;
-
-        const formData = {
-            assignmentID: form.assignmentID.value,
-            employeeID: form.employeeID.value,
-            equipmentID: form.equipmentID.value,
-            assignmentDate: form.assignmentDate.value,
-            returnDate: form.returnDate.value
-        };
-
-        fetch('http://localhost:5000/update_report', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Update Report Failed!');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                alert('Report updated successfully!');
-                form.reset();
-                fetchReport();
-            } else {
-                alert(`Report update failed: ${data.message}`);
-                form.reset();
-            }
-        })
-        .catch((error) => {
-            alert(`Report update failed: ${error.message}`);
-            form.reset();
-        });
-
         handleCancel();
     };
 
+    const exportMenu = (
+        <Menu>
+            <Menu.Item key="1" icon={<FaFilePdf style={{fontSize: '18px'}}/>} onClick={exportToPDF}>
+                Export to PDF
+            </Menu.Item>
+            <Menu.Item key="2" icon={<BsFiletypeXlsx style={{fontSize: '18px'}}/>} onClick={exportToExcel}>
+                Export to Excel
+            </Menu.Item>
+        </Menu>
+    );
 
+    const addUpdateMenu = (
+        <Menu>
+            <Menu.Item key="1" icon={<MdOutlinePostAdd style={{fontSize: '18px'}}/>} onClick={showAddModal}>
+                Add Record
+            </Menu.Item>
+            <Menu.Item key="2" icon={<GrDocumentUpdate style={{fontSize: '18px'}}/>} onClick={showUpdateModal}>
+                Update Record
+            </Menu.Item>
+        </Menu>
+    );
 
     return (
         <div>
             <Header />
             <Space className='Content'>
                 <SideMenu />
-                <Space direction="vertical" style={{ width: '100%', marginLeft: '40px', marginTop: '-20px'}}>
+                <Space direction="vertical" style={{ width: '100%', marginLeft: '40px', marginTop: '-20px' }}>
                     <h1 className='pageTitle'>Office Inventory Reports</h1>
                     <Space style={{ marginBottom: 16, justifyContent: 'space-between', width: '100%' }}>
                         <Input
@@ -176,45 +119,38 @@ export default function Reports() {
                             prefix={<SearchOutlined />}
                         />
                         <Space>
-                            <Button icon={<FaFilePdf />} type="primary" onClick={exportToPDF}>
-                                Export to PDF
-                            </Button>
-                            <Button icon={<BsFiletypeXlsx />} type="primary" onClick={exportToExcel}>
-                                Export to Xlsx
-                            </Button>
-
-                            {/* To be changed */}
-                            <Space style={{marginTop: -30}} direction='vertical'>
-                                <Button className='custom-btn' icon={<MdOutlinePostAdd style={{ fontSize: '18px'}} />} onClick={showAddModal}>
-                                    <h4>Add Record</h4>
+                            <Dropdown overlay={exportMenu} trigger={['click']}>
+                                <Button icon={<CiExport />} type="primary">
+                                    Export
                                 </Button>
-                                <Button className='custom-btn' icon={<GrDocumentUpdate style={{ fontSize: '18px'}} />} onClick={showUpdateModal}>
-                                    <h4>Update Record</h4>
+                            </Dropdown>
+                            <Dropdown overlay={addUpdateMenu} trigger={['click']}>
+                                <Button icon={<LuClipboardEdit />} type="primary">
+                                    Edit
                                 </Button>
-                            </Space>
-                            
+                            </Dropdown>
                         </Space>
                     </Space>
-                    <DisplayReports report_items={filterReports}/>
+                    <DisplayReports report_items={filterReports} />
 
                     <AddReport 
                         visible={isAddVisible} 
                         onCancel={handleCancel} 
-                        onSubmit={handleAdd}
+                        onSubmit={handleAdd} 
                     />
 
                     <UpdateReport 
                         visible={isUpdateVisible} 
                         onCancel={handleCancel} 
-                        onSubmit={handleUpdate}
+                        onSubmit={handleUpdate} 
                     />
                 </Space>
             </Space>
         </div>
-    )
+    );
 }
 
-const DisplayReports = ({report_items}) => {
+const DisplayReports = ({ report_items }) => {
     const columns = [
         { title: '#', dataIndex: 'id', key: 'id', render: (text, record, index) => index + 1 },
         { title: 'Assignment ID', dataIndex: 'assignment_id', key: 'assignment_id' },
@@ -241,7 +177,7 @@ const DisplayReports = ({report_items}) => {
     );
 };
 
-const AddReport = ({visible, onCancel, onSubmit}) => (
+const AddReport = ({ visible, onCancel, onSubmit }) => (
     <Modal title={'Add Report'} visible={visible} onCancel={onCancel} footer={null}>
         <form name='addrecord' onSubmit={onSubmit}>
             <div>
@@ -258,7 +194,7 @@ const AddReport = ({visible, onCancel, onSubmit}) => (
     </Modal>
 );
 
-const UpdateReport = ({visible, onCancel, onSubmit}) => (
+const UpdateReport = ({ visible, onCancel, onSubmit }) => (
     <Modal title={'Update Report'} visible={visible} onCancel={onCancel} footer={null}>
         <form name='updaterecord' onSubmit={onSubmit}>
             <div>

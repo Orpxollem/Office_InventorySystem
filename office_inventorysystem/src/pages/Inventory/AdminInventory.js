@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import Header from '../../components/Header';
 import SideMenu from '../../components/SideMenu';
-import { Space, Table, Input, Button, Modal } from 'antd';
+import { Space, Table, Input, Button, Modal, Dropdown, Menu } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import './Inventory.css'
 import { FaFilePdf } from "react-icons/fa6";
@@ -12,6 +12,8 @@ import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
 import { MdOutlineInventory } from "react-icons/md";
 import { BiCartAdd } from "react-icons/bi";
+import { LuFolderEdit } from 'react-icons/lu';
+import { CiExport } from 'react-icons/ci';
 
 export default function Inventory() {
     const [inventory, setInventory] = useState([]);
@@ -158,6 +160,29 @@ export default function Inventory() {
         handleCancel();
     };
 
+
+    const exportMenu = (
+        <Menu>
+            <Menu.Item key="1" icon={<FaFilePdf style={{fontSize: '18px'}}/>} onClick={exportToPDF}>
+                Export to PDF
+            </Menu.Item>
+            <Menu.Item key="2" icon={<BsFiletypeXlsx style={{fontSize: '18px'}}/>} onClick={exportToExcel}>
+                Export to Excel
+            </Menu.Item>
+        </Menu>
+    );
+
+    const addUpdateMenu = (
+        <Menu>
+            <Menu.Item key="1" icon={<BiCartAdd style={{fontSize: '18px'}}/>} onClick={showAddModal}>
+                Add To Inventory
+            </Menu.Item>
+            <Menu.Item key="2" icon={<MdOutlineInventory style={{fontSize: '18px'}}/>} onClick={showUpdateModal}>
+                Update Inventory Item
+            </Menu.Item>
+        </Menu>
+    );
+
     return (
         <div>
             <Header />
@@ -173,23 +198,18 @@ export default function Inventory() {
                             prefix={<SearchOutlined />}
                         />
                         <Space>
-                            <Button icon={<FaFilePdf />} type="primary" onClick={exportToPDF}>
-                                Export to PDF
-                            </Button>
-                            <Button icon={<BsFiletypeXlsx />} type="primary" onClick={exportToExcel}>
-                                Export to Xlsx
-                            </Button>
-                            {/*To be changed  */}
-                        <Space style={{marginTop: -30}} direction='vertical'>
-                            <Button className='custom-btn' icon={<BiCartAdd style={{ fontSize: '18px'}} />} onClick={showAddModal}>
-                                <h4>Add Item</h4> 
-                            </Button>
-                            <Button className='custom-btn' icon={<MdOutlineInventory style={{ fontSize: '18px'}} />} onClick={showUpdateModal}>
-                                <h4>Update Item</h4> 
-                            </Button>
+                            <Dropdown overlay={exportMenu} trigger={['click']}>
+                                <Button icon={<CiExport />} type="primary">
+                                    Export
+                                </Button>
+                            </Dropdown>
+                            <Dropdown overlay={addUpdateMenu} trigger={['click']}>
+                                <Button icon={<LuFolderEdit />} type="primary">
+                                    Edit
+                                </Button>
+                            </Dropdown>
                         </Space>
-
-                        </Space>
+                        
                     </Space>
                     <InventoryDisplay inventory_items={filterInventory} />
 

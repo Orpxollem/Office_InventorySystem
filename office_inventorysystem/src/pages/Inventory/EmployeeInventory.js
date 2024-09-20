@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react'
 import Header from '../../components/Header';
 import EmployeeSideMenu from '../../components/EmployeeSideMenu';
-import { Space, Table, Input, Button } from 'antd';
+import { Space, Table, Input, Button, Modal, Dropdown, Menu } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import './Inventory.css'
 import { FaFilePdf } from "react-icons/fa6";
 import { BsFiletypeXlsx } from "react-icons/bs";
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
-import './Inventory.css';
+import { MdOutlineInventory } from "react-icons/md";
+import { BiCartAdd } from "react-icons/bi";
+import { LuFolderEdit } from 'react-icons/lu';
+import { CiExport } from 'react-icons/ci';
 
 export default function EmployeeInventory() {
     const [inventory, setInventory] = useState([]);
     const [filterInventory, setFilterInventory] = useState([]);
+    const [isUpdateVisible, setIsUpdateVisible] = useState(false);
+    const [isAddVisible, setIsAddVisible] = useState(false);
 
     useEffect(() => {
         fetchInventory();
@@ -40,6 +46,14 @@ export default function EmployeeInventory() {
         setFilterInventory(filtered);
     };
 
+    const showUpdateModal = () => setIsUpdateVisible(true);
+    const showAddModal = () => setIsAddVisible(true);
+
+    const handleCancel = () => {
+        setIsUpdateVisible(false);
+        setIsAddVisible(false);
+    };
+
     const exportToPDF = () => {
         const doc = new jsPDF();
         html2canvas(document.querySelector(".inventory-table")).then(canvas => {
@@ -57,11 +71,123 @@ export default function EmployeeInventory() {
         XLSX.writeFile(workbook, 'Inventory.xlsx');
     };
 
+    const handleAdd = (event) => {
+        event.preventDefault();
+
+        const form = event.target;
+
+        const formData = {
+            equipmentID: form.equipmentID.value,
+            equipmentName: form.equipmentName.value,
+            type: form.type.value,
+            condition: form.condition.value,
+            location: form.location.value,
+            assignment: form.assignment.value,
+            purchasedate: form.purchasedate.value,
+        };
+
+        fetch('http://localhost:5000/add_inventory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Item Add Failed!');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Item added successfully!');
+                form.reset();
+                fetchInventory();
+            } else {
+                alert(`Item add failed: ${data.message}`);
+                form.reset();
+            }
+        })
+        .catch((error) => {
+            alert(`Item add failed: ${error.message}`);
+            form.reset();
+        });
+
+        handleCancel();
+    };
+
+    const handleUpdate = (event) => {
+        event.preventDefault();
+
+        const form = event.target;
+
+        const formData = {
+            equipmentID: form.equipmentID.value,
+            condition: form.condition.value,
+            location: form.location.value,
+            assignment: form.assignment.value,
+        };
+
+        fetch('http://localhost:5000/update_inventory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Update Inventory Item Failed!');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Inventory Item updated successfully!');
+                form.reset();
+                fetchInventory();
+            } else {
+                alert(`Inventory Item update failed: ${data.message}`);
+                form.reset();
+            }
+        })
+        .catch((error) => {
+            alert(`Inventory Item update failed: ${error.message}`);
+            form.reset();
+        });
+
+        handleCancel();
+    };
+
+
+    const exportMenu = (
+        <Menu>
+            <Menu.Item key="1" icon={<FaFilePdf style={{fontSize: '18px'}}/>} onClick={exportToPDF}>
+                Export to PDF
+            </Menu.Item>
+            <Menu.Item key="2" icon={<BsFiletypeXlsx style={{fontSize: '18px'}}/>} onClick={exportToExcel}>
+                Export to Excel
+            </Menu.Item>
+        </Menu>
+    );
+
+    const addUpdateMenu = (
+        <Menu>
+            <Menu.Item key="1" icon={<BiCartAdd style={{fontSize: '18px'}}/>} onClick={showAddModal}>
+                Add To Inventory
+            </Menu.Item>
+            <Menu.Item key="2" icon={<MdOutlineInventory style={{fontSize: '18px'}}/>} onClick={showUpdateModal}>
+                Update Inventory Item
+            </Menu.Item>
+        </Menu>
+    );
+
     return (
         <div>
             <Header />
             <Space className='Content'>
-                <EmployeeSideMenu />
+            <EmployeeSideMenu />
                 <Space direction="vertical" style={{ width: '100%', marginLeft: '40px', marginTop: '-20px'}}>
                     <h1 className='pageTitle'>Inventory Overview</h1>
                     <Space style={{ marginBottom: 16, justifyContent: 'space-between', width: '100%' }}>
@@ -72,15 +198,35 @@ export default function EmployeeInventory() {
                             prefix={<SearchOutlined />}
                         />
                         <Space>
-                            <Button icon={<FaFilePdf />} type="primary" onClick={exportToPDF}>
-                                Export to PDF
-                            </Button>
-                            <Button icon={<BsFiletypeXlsx />} type="primary" onClick={exportToExcel}>
-                                Export to Xlsx
-                            </Button>
+                            <Dropdown overlay={exportMenu} trigger={['click']}>
+                                <Button icon={<CiExport />} type="primary">
+                                    Export
+                                </Button>
+                            </Dropdown>
+                            <Dropdown overlay={addUpdateMenu} trigger={['click']}>
+                                <Button icon={<LuFolderEdit />} type="primary">
+                                    Edit
+                                </Button>
+                            </Dropdown>
                         </Space>
+                        
                     </Space>
                     <InventoryDisplay inventory_items={filterInventory} />
+
+                    <AddItem
+                        visible={isAddVisible}
+                        onCancel={handleCancel}
+                        onSubmit={handleAdd}
+                        title='Add Item to Inventory'
+                    />
+
+                    <UpdateItem 
+                        visible={isUpdateVisible}
+                        onCancel={handleCancel}
+                        onSubmit={handleUpdate}
+                        title='Update Inventory Item'
+                    />
+
                 </Space>
             </Space>
         </div>
@@ -148,3 +294,41 @@ const InventoryDisplay = ({ inventory_items }) => {
         />
     );
 };
+
+const AddItem = ({visible, onCancel, onSubmit, title}) => (
+    <Modal title={title} visible={visible} onCancel={onCancel} footer={null}>
+        <form name='additem' onSubmit={onSubmit}>
+            <div>
+                <input type="text" name="equipmentID" placeholder='Equipment ID' required/>
+                <input type="text" name="equipmentName" placeholder='Equipment Name' required/>
+                <input type="text" name="type" placeholder='Type' required/>
+                <input type="text" name="condition" placeholder='Condition' required/>
+                <input type="text" name="location" placeholder='Location' required/>
+                <input type="text" name="assignment" placeholder='Assignment' required/>
+                <input type="text" name="purchasedate" placeholder='Purchase Date (YYYY-MM-DD)' required/>
+            </div>
+            <div className='form-button'>
+                <button type="submit" className='add-button'>Add Item</button>
+            </div>
+        </form>
+    </Modal>
+);
+
+
+const UpdateItem = ({visible, onCancel, onSubmit, title}) => (
+    <Modal title={title} visible={visible} onCancel={onCancel} footer={null}>
+        <form name='updateitem'onSubmit={onSubmit}>
+            <div>
+                <label>ID For Item Update</label>
+                <input type="text" name="equipmentID" placeholder='Equipment ID' required/>
+                <label>Update Details</label>
+                <input type="text" name="condition" placeholder='Condition' required/>
+                <input type="text" name="location" placeholder='Location' required/>
+                <input type="text" name="assignment" placeholder='Assignment' required/>
+            </div>
+            <div className='form-button'>
+                <button type="submit" className='update-button'>Update Item</button>
+            </div>
+        </form>
+    </Modal>
+);
