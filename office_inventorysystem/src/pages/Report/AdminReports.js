@@ -8,13 +8,12 @@ import { CiExport } from 'react-icons/ci';
 import { FaFilePdf } from 'react-icons/fa6';
 import { BsFiletypeXlsx } from 'react-icons/bs';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
 import { GrDocumentUpdate } from 'react-icons/gr';
 import { LuClipboardEdit } from "react-icons/lu";
 import { MdOutlinePostAdd } from 'react-icons/md';
-
 import './Reports.css';
+import 'jspdf-autotable';
 
 export default function Reports() {
     const [reports, setReports] = useState([]);
@@ -28,13 +27,13 @@ export default function Reports() {
 
     const fetchReport = () => {
         axios.get('http://localhost:5000/reports')
-        .then(response => {
-            setReports(response.data);
-            setFilterReports(response.data);
-        })
-        .catch(error => {
-            console.error('There was an error fetching the reports!', error);
-        });
+            .then(response => {
+                setReports(response.data);
+                setFilterReports(response.data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the reports!', error);
+            });
     };
 
     const handleSearch = (e) => {
@@ -57,16 +56,34 @@ export default function Reports() {
 
     const exportToPDF = () => {
         const doc = new jsPDF();
-        html2canvas(document.querySelector(".reports-table")).then(canvas => {
-            const imgData = canvas.toDataURL("image/png");
-
-            doc.addImage(imgData, 'PNG', 10, 10, 190, 310);
-            doc.save('Reports.pdf');
+        const headers = [["Assignment ID", "Employee ID", "Equipment ID", "Assignment Date", "Return Date"]];
+        const rows = filterReports.map(item => [
+            item.assignment_id,
+            item.employee_id,
+            item.equipment_id,
+            item.assignment_date,
+            item.return_date
+        ]);
+        doc.autoTable({
+            head: headers,
+            body: rows,
+            theme: 'grid',
+            margin: { top: 20 },
+            styles: { fontSize: 10, cellPadding: 3 },
         });
+        doc.save('Reports.pdf');
     };
 
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(filterReports);
+        const filteredData = filterReports.map(item => ({
+            "Assignment ID": item.assignment_id,
+            "Employee ID": item.employee_id,
+            "Equipment ID": item.equipment_id,
+            "Assignment Date": item.assignment_date,
+            "Return Date": item.return_date
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(filteredData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Reports");
         XLSX.writeFile(workbook, 'Reports.xlsx');

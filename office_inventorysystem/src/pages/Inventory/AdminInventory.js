@@ -8,12 +8,13 @@ import { FaFilePdf } from "react-icons/fa6";
 import { BsFiletypeXlsx } from "react-icons/bs";
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
 import { MdOutlineInventory } from "react-icons/md";
 import { BiCartAdd } from "react-icons/bi";
 import { LuFolderEdit } from 'react-icons/lu';
 import { CiExport } from 'react-icons/ci';
+import 'jspdf-autotable';
+
 
 export default function Inventory() {
     const [inventory, setInventory] = useState([]);
@@ -56,20 +57,49 @@ export default function Inventory() {
 
     const exportToPDF = () => {
         const doc = new jsPDF();
-        html2canvas(document.querySelector(".inventory-table")).then(canvas => {
-            const imgData = canvas.toDataURL("image/png");
-
-            doc.addImage(imgData, 'PNG', 10, 10, 190, 310);
-            doc.save('Inventory.pdf');
+        const headers = [["Equipment ID", "Equipment Name", "Type", "Condition", "Location", "Assignment", "Purchase Date"]];
+        const rows = filterInventory.map(item => [
+            item.equipment_id,
+            item.name, 
+            item.type, 
+            item.condition, 
+            item.location, 
+            item.assigned_to, 
+            item.purchase_date
+        ]);
+        doc.autoTable({
+            head: headers,
+            body: rows,
+            theme: 'grid',
+            margin: { top: 20 },
+            styles: { fontSize: 10, cellPadding: 3 },
         });
+        doc.save('Inventory.pdf');
     };
+    
+    
+    
 
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(filterInventory);
+        const filteredData = filterInventory.map(item => ({
+            "Equipment ID": item.equipment_id,
+            "Equipment Name": item.name,
+            "Type": item.type,
+            "Condition": item.condition,
+            "Location": item.location,
+            "Assignment": item.assigned_to,
+            "Purchase Date": item.purchase_date
+        }));
+    
+        const worksheet = XLSX.utils.json_to_sheet(filteredData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Inventory");
         XLSX.writeFile(workbook, 'Inventory.xlsx');
     };
+    
+    
+    
+    
 
     const handleAdd = (event) => {
         event.preventDefault();
