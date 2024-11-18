@@ -26,7 +26,7 @@ export default function EmployeeInventory() {
     }, []);
 
     const fetchInventory = () => {
-        axios.get('http://localhost:5000/inventory')
+        axios.get('http://127.0.0.1:5000/inventory')
             .then(response => {
                 setInventory(response.data);
                 setFilterInventory(response.data);

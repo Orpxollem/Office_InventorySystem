@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 from flask.helpers import send_from_directory
 from bson import ObjectId
 import datetime
+import os
 
 app = Flask(__name__, static_folder='office_inventorysystem/build', static_url_path='')
 
@@ -12,16 +13,16 @@ client = MongoClient('mongodb+srv://CyberXTeam:CybeerXPass@officeinventorysystem
 
 db = client['office_inventory_system']
 
-CORS(app)
+CORS(app, origins=["https://office-inventorysystem.onrender.com"])
 
 @app.route('/')
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
 
 
 @app.route('/signin', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def signin():
     if request.method == 'POST':
         data = request.json
@@ -51,7 +52,7 @@ def signin():
         return jsonify({'success': False, 'message': 'Invalid credentials'})
         
 @app.route('/api/user_activity', methods=['GET'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def user_activity():
     pipeline = [
         {"$group": {"_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$loginTime"}}, "count": {"$sum": 1}}},
@@ -64,7 +65,7 @@ def user_activity():
     return jsonify({"dates": dates, "activity": counts})
 
 @app.route('/user/<id>', methods=['GET'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def get_user(id):
     user = db['Users'].find_one({'_id': ObjectId(id)})
     if user:
@@ -73,7 +74,7 @@ def get_user(id):
         return jsonify({'error': 'User not found'})
     
 @app.route('/employee/<id>', methods=['GET'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def get_employee(id):
     employee = db['Employees'].find_one({'_id': ObjectId(id)})
     if employee:
@@ -88,7 +89,7 @@ def get_employee(id):
 
     
 @app.route('/update_password', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def update_password():
     if request.method == 'POST':
         data = request.json
@@ -114,7 +115,7 @@ def update_password():
             return jsonify({'success': False, 'message': 'Password update unsuccessful'})
 
 @app.route('/add_user', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def add_user():
     if request.method == 'POST':
         data = request.json
@@ -133,7 +134,7 @@ def add_user():
         
 
 @app.route('/update_user', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def update_user():
     if request.method == 'POST':
         data = request.json
@@ -151,7 +152,7 @@ def update_user():
             return jsonify({'success': False, 'message': 'User does not exist'})
         
 @app.route('/remove_user', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def remove_user():
     if request.method == 'POST':
         data = request.json
@@ -168,7 +169,7 @@ def remove_user():
 
 
 @app.route('/employees', methods=['GET'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def get_employees():
     employees = list(db['Employees'].find())
     for employee in employees:
@@ -176,7 +177,7 @@ def get_employees():
     return jsonify(employees)
 
 @app.route('/inventory', methods=['GET'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def get_inventory():
     inventory = list(db['Inventory'].find())
     for item in inventory:
@@ -185,7 +186,7 @@ def get_inventory():
 
 
 @app.route('/reports', methods=['GET'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def get_report():
     reports = list(db['Reports'].find())
     for report in reports:
@@ -194,7 +195,7 @@ def get_report():
 
 
 @app.route('/add_inventory', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def add_inventory():
     if request.method == 'POST':
         data = request.json
@@ -216,7 +217,7 @@ def add_inventory():
 
 
 @app.route('/update_inventory', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def update_inventory():
     if request.method == 'POST':
         data = request.json
@@ -234,7 +235,7 @@ def update_inventory():
         return jsonify({'success': False, 'message': 'Item doesnot exist'})
     
 @app.route('/remove_inventory', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def remove_inventory():
     if request.method == 'POST':
         data = request.json
@@ -250,7 +251,7 @@ def remove_inventory():
         return jsonify({'success': False, 'message': 'Item does not exist'})
     
 @app.route('/add_report', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def add_report():
     if request.method == 'POST':
         data = request.json
@@ -269,7 +270,7 @@ def add_report():
         return jsonify({'success': True, 'message': 'Report added successfully'})
     
 @app.route('/update_report', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def update_report():
     if request.method == 'POST':
         data = request.json
@@ -289,7 +290,7 @@ def update_report():
     
 
 @app.route('/api/inventory_summary', methods=['GET'])
-@cross_origin()
+@cross_origin(origins=["https://office-inventorysystem.onrender.com"])
 def inventory_summary():
     pipeline = [
         {"$group": {"_id": "$type", "count": {"$sum": 1}}}
@@ -303,4 +304,4 @@ def inventory_summary():
 
 if __name__ == "__main__":
     app.debug = True
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
