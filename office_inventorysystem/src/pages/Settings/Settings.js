@@ -17,7 +17,7 @@ const ChangePassword = () => {
         const userId = localStorage.getItem('userId');
 
         if (userId) {
-            axios.get(`http://localhost:5000/user/${userId}`)
+            axios.get(`https://office-inventorysystem.onrender.com/user/${userId}`)
             .then(response => {
                 if (response.data.staffId) {
                     setID(response.data.staffId);

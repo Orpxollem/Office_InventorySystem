@@ -26,7 +26,7 @@ export default function Reports() {
     }, []);
 
     const fetchReport = () => {
-        axios.get('http://localhost:5000/reports')
+        axios.get('https://office-inventorysystem.onrender.com/reports')
             .then(response => {
                 setReports(response.data);
                 setFilterReports(response.data);

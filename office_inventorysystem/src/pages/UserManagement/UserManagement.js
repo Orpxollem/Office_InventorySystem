@@ -19,7 +19,7 @@ export default function UserManagement() {
     }, []);
 
     const fetchEmployees = () => {
-        axios.get('http://localhost:5000/employees')
+        axios.get('https://office-inventorysystem.onrender.com/employees')
             .then(response => {
                 setEmployees(response.data);
                 setFilterUsers(response.data);
