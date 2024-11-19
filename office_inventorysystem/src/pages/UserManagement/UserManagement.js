@@ -61,7 +61,7 @@ export default function UserManagement() {
             phoneNumber: event.target.phoneNumber.value,
         };
 
-        fetch('http://localhost:5000/update_user', {
+        fetch('https://office-inventorysystem.onrender.com/update_user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export default function UserManagement() {
             employeeName: event.target.employeeName.value
         };
 
-        fetch('http://localhost:5000/remove_user', {
+        fetch('https://office-inventorysystem.onrender.com/remove_user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export default function UserManagement() {
             phoneNumber: event.target.phoneNumber.value,
         };
 
-        fetch('http://localhost:5000/add_user', {
+        fetch('https://office-inventorysystem.onrender.com/add_user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

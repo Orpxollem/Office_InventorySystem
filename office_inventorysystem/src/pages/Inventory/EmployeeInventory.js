@@ -111,7 +111,7 @@ export default function EmployeeInventory() {
             purchasedate: form.purchasedate.value,
         };
 
-        fetch('http://localhost:5000/add_inventory', {
+        fetch('https://office-inventorysystem.onrender.com/add_inventory', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ export default function EmployeeInventory() {
             assignment: form.assignment.value,
         };
 
-        fetch('http://localhost:5000/update_inventory', {
+        fetch('https://office-inventorysystem.onrender.com/update_inventory', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
