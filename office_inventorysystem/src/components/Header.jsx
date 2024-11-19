@@ -26,13 +26,13 @@ const Header = () => {
         const userId = localStorage.getItem('userId');
         if (userId) {
             // First, try to fetch user data from the Users collection
-            axios.get(`http://localhost:5000/user/${userId}`)
+            axios.get(`https://office-inventorysystem.onrender.com/user/${userId}`)
                 .then(response => {
                     if (response.data.name) {
                         setUserName(response.data.name);
                     } else {
                         // If not found in Users, try to fetch from Employees collection
-                        axios.get(`http://localhost:5000/employee/${userId}`)
+                        axios.get(`https://office-inventorysystem.onrender.com/employee/${userId}`)
                             .then(response => {
                                 if (response.data.emplName) {
                                     setUserName(response.data.emplName);

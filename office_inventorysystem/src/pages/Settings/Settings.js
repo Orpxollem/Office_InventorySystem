@@ -45,7 +45,7 @@ const ChangePassword = () => {
             staffId: userID,
         };
 
-        fetch('http://localhost:5000/update_password', {
+        fetch('https://office-inventorysystem.onrender.com/update_password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ const Account = () => {
         const userId = localStorage.getItem('userId');
 
         if (userId) {
-            axios.get(`http://localhost:5000/user/${userId}`)
+            axios.get(`https://office-inventorysystem.onrender.com/user/${userId}`)
             .then(response => {
                 if (response.data.name) {
                     setUserName(response.data.name);
